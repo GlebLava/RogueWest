@@ -7,7 +7,7 @@ TagManager:
   - SpawnPoint
   - Enemy
   - MapGenerator
-  - Room
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -45,6 +45,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Wall
+    uniqueID: 3267539553
+    locked: 0
+  - name: Decoration
+    uniqueID: 1640274163
+    locked: 0
   - name: WeaponBehindBody
     uniqueID: 3587358709
     locked: 0
@@ -53,4 +59,7 @@ TagManager:
     locked: 0
   - name: WeaponInFrontOfBody
     uniqueID: 4272950339
+    locked: 0
+  - name: Shadow
+    uniqueID: 4236059153
     locked: 0

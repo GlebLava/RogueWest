@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject body;
     public GameObject head;
 
-    Vector2 dir;
+    [System.NonSerialized]
+    public Vector2 dir;
     private void Update()
     {
         dir = transform.position;

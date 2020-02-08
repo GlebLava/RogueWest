@@ -22,14 +22,21 @@ public class Projectile : MonoBehaviour
             {
                 Debug.Log("hit Enemy");
             }
+
         }
 
         transform.Translate(Vector2.up * speed * Time.deltaTime);
         
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
+    }
+
     void DestroyProjectile()
     {
         Destroy(gameObject);
     }
+
 }
