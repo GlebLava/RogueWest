@@ -16,7 +16,7 @@ public static class MapGeneratorClass
         public Vector2 pos;
     }
 
-    public enum RoomType {Empty, SpawnRoom, DefaultRoom, CleanUp }
+    public enum RoomType { Empty, SpawnRoom, DefaultRoom, CleanUp }
 
     public static RoomType[,] GenerateMap(int seed, int mapWidth, int mapHeight, int maxRooms)
     {
@@ -69,7 +69,7 @@ public static class MapGeneratorClass
                 {
                     map[(int)myWalker.pos.x, (int)myWalker.pos.y] = RoomType.DefaultRoom;
                 }
-               
+
                 //chance: destroy walker
                 int numberChecks = walkers.Count; //might modify count while in this loop
 
@@ -132,7 +132,7 @@ public static class MapGeneratorClass
 
         }
 
-       
+
         void DeleteMiddleRooms()
         {
             for (int x = 2; x < mapWidth - 3; x++)
@@ -154,7 +154,7 @@ public static class MapGeneratorClass
             CleanUp();
         }
 
-            int NumberOfRooms(RoomType[,] gridLocal)
+        int NumberOfRooms(RoomType[,] gridLocal)
         {
             int count = 0;
             foreach (RoomType space in gridLocal)
@@ -182,7 +182,7 @@ public static class MapGeneratorClass
         Vector2 RandomDirection()
         {
             //pick random int between 0 and 3
-            int choice = prng.Next(0,4); //can give the numbers: 0,1,2,3 
+            int choice = prng.Next(0, 4); //can give the numbers: 0,1,2,3 
             //use that int to chose a direction
             switch (choice)
             {
@@ -195,9 +195,9 @@ public static class MapGeneratorClass
                 default:
                     return Vector2.right;
             }
-            
+
         }
-        
+
 
         int NumberOfNeighboors(int posX, int posY, RoomType typeOfNeighbour, RoomType typeOfNeighbour2)
         {
@@ -229,7 +229,7 @@ public static class MapGeneratorClass
             {
                 for (int y = -1; y < 2; y++)
                 {
-                    if ( map[posX + x, posY + y] == typeOfNeighbour || map[posX + x, posY + y] == typeOfNeighbour2)
+                    if (map[posX + x, posY + y] == typeOfNeighbour || map[posX + x, posY + y] == typeOfNeighbour2)
                     {
                         if (!(x == 0 && y == 0) && !(x != 0 && y != 0))
                         {
@@ -248,7 +248,7 @@ public static class MapGeneratorClass
             {
                 for (int y = 2; y < mapHeight - 1; y++)
                 {
-                    if (map[x, y] == RoomType.Empty && prng.Next(0,1) < 0.2f && NumberOfAccesibleNeighboors(x,y, RoomType.DefaultRoom, RoomType.DefaultRoom) != 0)
+                    if (map[x, y] == RoomType.Empty && prng.Next(0, 1) < 0.2f && NumberOfAccesibleNeighboors(x, y, RoomType.DefaultRoom, RoomType.DefaultRoom) != 0)
                     {
                         map[x, y] = RoomType.SpawnRoom;
                         return;

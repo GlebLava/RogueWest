@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class RoomClass
 {
+    public enum RoomType { Empty, Default, SpawnRoom, }
 
     public int border = 15;
-    public enum RoomSprite { Empty, Border, Floor, WallTop, WallBot, WallLeft, WallRight, CornerTopLeft, CornerTopRight, CornerBotLeft, CornerBotRight, twoTopBot, twoLeftRight
-    , threeBot, threeTop, threeLeft, threeRight, Pillar}
+    public enum RoomSprite { Empty, Border, Floor, Floor2,
+        WallTop, WallBot, WallLeft, WallRight, 
+        CornerTopLeft, CornerTopRight, CornerBotLeft, CornerBotRight, 
+        twoTopBot, twoLeftRight,
+        threeBot, threeTop, threeLeft, threeRight, 
+        Pillar, BorderWall}
+
+    public struct RoomTileandUnderneath
+    {
+        public RoomSprite roomSprite;
+        public RoomSprite underneath;
+    }
 
 
-
-    public  int roomWidth = 40;
-    public  int roomHeight = 25;
+    public  int roomWidth = 25;
+    public  int roomHeight = 15;
 
     public int finalRoomWidth;
     public int finalRoomHeight;
@@ -21,6 +31,8 @@ public class RoomClass
     public bool rightOpen;
     public bool topOpen;
     public bool botOpen;
+
+
 
     public bool active = false; //false by default
     public Vector2 globalPosition;
@@ -32,9 +44,13 @@ public class RoomClass
 
     public RoomSprite[,] roomGrid;
 
-    private GameObject thisRoom; public GameObject ThisRoom { get => thisRoom; }
+    public RoomType roomType;
 
-    public RoomClass(int seed, Vector2 globalPosition, bool leftOpen, bool rightOpen, bool topOpen, bool botOpen, bool active, GameObject thisRoom)
+    public GameObject thisRoom;
+
+    System.Random prng;
+
+    public RoomClass(int seed, int roomWidth, int roomHeight, Vector2 globalPosition, bool leftOpen, bool rightOpen, bool topOpen, bool botOpen, bool active)
     {
         this.globalPosition = globalPosition;
         this.leftOpen = leftOpen;
@@ -42,26 +58,37 @@ public class RoomClass
         this.topOpen = topOpen;
         this.botOpen = botOpen;
         this.active = active;
-        this.thisRoom = thisRoom;
+        this.roomWidth = roomWidth;
+        this.roomHeight = roomHeight;
 
-        System.Random prng = new System.Random(seed);
+        prng = new System.Random(seed);
 
         finalRoomWidth = roomWidth + border * 2;
         finalRoomHeight = roomHeight + border * 2;
+
 
     }
 
     public RoomSprite[,] GenerateRoomGrid()
     {
 
+        // Um die eingrenzen zu können wo die eingänge gebaut werden
+
+        int eingrenzungWidth = 2;
+        int eingrenzungHeight = 5;
+
+
         RoomSprite[,] roomGrid = new RoomSprite[finalRoomWidth, finalRoomHeight];
 
         Setup();
+        Variation();
 
         leftEntrance(leftOpen);
         rightEntrance(rightOpen);
         topEntrance(topOpen);
         botEntrance(botOpen);
+        Floor2();
+        MakeColliderBorder();
 
         roomGrid = BasicSpriteAssigner.AssignBasicSprites(roomGrid);
 
@@ -77,24 +104,75 @@ public class RoomClass
                     else roomGrid[x, y] = RoomSprite.Floor;
                 }
             }
+
         }
 
+        void Variation()
+        {
+            int rHBT = finalRoomHeight - border;
+            int rWBR = finalRoomWidth - border;
+
+            for (int x = border; x < rWBR; x++)
+            {
+                int dex = prng.Next(4);
+
+                for (int y = rHBT; y > rHBT - dex; y--)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
+            for (int x = border; x < rWBR; x++)
+            {
+                int dex = prng.Next(4);
+
+                for (int y = border; y < border + dex + 1; y++)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
+            for (int y = border; y < rHBT; y++)
+            {
+                int dex = prng.Next(4);
+
+                for (int x = rWBR; x > rWBR - dex + 1; x--)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
+            for (int y = border; y < rHBT; y++)
+            {
+                int dex = prng.Next(4);
+
+                for (int x = border; x < border + dex + 1; x++)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
+        }
 
         void leftEntrance(bool t)
         {
-            int entranceLowestY = finalRoomHeight / 2 - 1;
-            int entranceHighestY = finalRoomHeight / 2 + 1;
+            
             if (t)
             {
-                for (int x = 0; x < border; x++)
+                int entranceMiddl = prng.Next(finalRoomHeight / 2 - eingrenzungWidth, finalRoomHeight / 2 + eingrenzungWidth -1);
+                int entranceLowestY = entranceMiddl  - 1;
+                int entranceHighestY = entranceMiddl + 1;
+                
+                for (int x = 0; x < finalRoomWidth / 2; x++)
                 {
                     for (int y = entranceLowestY; y < entranceHighestY; y++)
                     {
-                        roomGrid[x, y] = RoomClass.RoomSprite.Floor;
+                        roomGrid[x, y] = RoomSprite.Floor;
                     }
                 }
 
-                enterPointLeft = new Vector2(border - 1, finalRoomHeight / 2);
+                enterPointLeft = new Vector2(border - 1, entranceMiddl);
+             
             }
 
 
@@ -103,11 +181,13 @@ public class RoomClass
 
         void rightEntrance(bool t)
         {
-            int entranceLowestY = finalRoomHeight / 2 - 1;
-            int entranceHighestY = finalRoomHeight / 2 + 1;
+            
             if (t)
             {
-                for (int x = roomWidth + border - 1; x < finalRoomWidth; x++)
+                int entranceMiddl = prng.Next(finalRoomHeight / 2 - eingrenzungWidth, finalRoomHeight / 2 + eingrenzungWidth - 1);
+                int entranceLowestY = entranceMiddl  - 1;
+                int entranceHighestY = entranceMiddl  + 1;
+                for (int x = finalRoomWidth/2; x < finalRoomWidth; x++)
                 {
                     for (int y = entranceLowestY; y < entranceHighestY; y++)
                     {
@@ -115,7 +195,7 @@ public class RoomClass
                     }
                 }
 
-                enterPointRight = new Vector2(finalRoomWidth - border, finalRoomHeight / 2);
+                enterPointRight = new Vector2(finalRoomWidth - border, entranceMiddl);
             }
 
         }
@@ -124,19 +204,21 @@ public class RoomClass
 
         void topEntrance(bool t)
         {
-            int entranceLowestX = finalRoomWidth / 2 - 1;
-            int entranceHighestX = finalRoomWidth / 2 + 1;
+            
             if (t)
             {
+                int entranceMiddl = prng.Next(finalRoomWidth / 2 - eingrenzungHeight, finalRoomWidth / 2 + eingrenzungHeight - 1);
+                int entranceLowestX = entranceMiddl  - 1;
+                int entranceHighestX = entranceMiddl  + 1;
                 for (int x = entranceLowestX; x < entranceHighestX; x++)
                 {
-                    for (int y = roomHeight; y < finalRoomHeight; y++)
+                    for (int y = finalRoomHeight/2; y < finalRoomHeight; y++)
                     {
                         roomGrid[x, y] = RoomClass.RoomSprite.Floor;
                     }
                 }
-
-                enterPointTop = new Vector2(finalRoomWidth / 2, finalRoomHeight - border);
+  
+                enterPointTop = new Vector2(entranceMiddl, finalRoomHeight - border);
             }
 
         }
@@ -144,22 +226,64 @@ public class RoomClass
 
         void botEntrance(bool t)
         {
-            int entranceLowestX = finalRoomWidth / 2 - 1;
-            int entranceHighestX = finalRoomWidth / 2 + 1;
             if (t)
             {
+                int entranceMiddl = prng.Next(finalRoomWidth / 2 - eingrenzungHeight, finalRoomWidth/ 2 + eingrenzungHeight - 1);
+                int entranceLowestX = entranceMiddl  - 1;
+                int entranceHighestX = entranceMiddl  + 1;
                 for (int x = entranceLowestX; x < entranceHighestX; x++)
                 {
-                    for (int y = 0; y < border; y++)
+                    for (int y = 0; y < finalRoomHeight / 2; y++)
                     {
                         roomGrid[x, y] = RoomClass.RoomSprite.Floor;
                     }
 
                 }
 
-                enterPointBot = new Vector2(finalRoomWidth / 2, border - 1);
+                enterPointBot = new Vector2(entranceMiddl , border - 1);
             }
 
+        }
+
+        void MakeColliderBorder()
+        {
+            for (int x = 0; x < finalRoomWidth - 1; x++) roomGrid[x, finalRoomHeight - 1] = RoomClass.RoomSprite.BorderWall;
+            for (int x = 0; x < finalRoomWidth - 1; x++) roomGrid[x, 0] = RoomClass.RoomSprite.BorderWall;
+            for (int y = 0; y < finalRoomHeight - 1; y++) roomGrid[finalRoomWidth - 1, y] = RoomClass.RoomSprite.BorderWall;
+            for (int y = 0; y < finalRoomHeight - 1; y++) roomGrid[0, y] = RoomClass.RoomSprite.BorderWall;
+        }
+
+        void Floor2()
+        {
+            for (int x = border + 3; x < finalRoomWidth - border - 2; x++)
+            {
+                for (int y = border + 3; y < finalRoomHeight - border - 2; y++)
+                {
+                    if (roomGrid[x,y] == RoomSprite.Floor && prng.Next(11) < 2)
+                    {
+                        int cas = prng.Next(11);
+                        if (cas < 3 ) roomGrid[x, y] = RoomSprite.Floor2;
+
+                        if (cas  < 5 && cas > 3)
+                        {
+                            roomGrid[x, y] = RoomSprite.Floor2;
+                            roomGrid[x + 1, y] = RoomSprite.Floor2;
+                            roomGrid[x, y + 1] = RoomSprite.Floor2;
+                            roomGrid[x + 1, y + 1] = RoomSprite.Floor2;
+
+                        }
+                        if (cas < 8 && cas > 6)
+                        {
+                            roomGrid[x, y] = RoomSprite.Floor2;
+                            roomGrid[x + 1, y] = RoomSprite.Floor2;
+                            roomGrid[x, y + 1] = RoomSprite.Floor2;
+                            roomGrid[x + 1, y + 1] = RoomSprite.Floor2;
+                            roomGrid[x - 1, y] = RoomSprite.Floor2;
+                            roomGrid[x, y - 1] = RoomSprite.Floor2;
+                        }
+                    }
+                }
+            }
         }
 
         this.roomGrid = roomGrid;

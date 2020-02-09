@@ -10,25 +10,33 @@ public class DestroyableDecoration : MonoBehaviour
 
 
     int lives = 3;
+    GameObject player;
 
+    private void Awake()
+    {
+        player = GameObject.FindWithTag("Player");
+    }
     private void FixedUpdate()
     {
             switch (lives)
         {
             case 3:
                 obj1.SetActive(true);
+                LayerHandler(obj1.GetComponent<SpriteRenderer>());
                 obj2.SetActive(false);
                 obj3.SetActive(false);
                 break;
             case 2:
                 obj1.SetActive(false);
                 obj2.SetActive(true);
+                LayerHandler(obj2.GetComponent<SpriteRenderer>());
                 obj3.SetActive(false);
                 break;
             case 1:
                 obj1.SetActive(false);
                 obj2.SetActive(false);
                 obj3.SetActive(true);
+                LayerHandler(obj3.GetComponent<SpriteRenderer>());
                 break;
             default:
                 Destroy(gameObject);
@@ -37,11 +45,22 @@ public class DestroyableDecoration : MonoBehaviour
         }   
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Bullet")
         {
             lives--;
+        }
+    }
+
+    private void LayerHandler(SpriteRenderer spriteRenderer)
+    {
+        if (player.transform.position.y > transform.position.y + 0.25f)
+        {
+            spriteRenderer.sortingLayerName = "DecorationInFrontPlayer";
+        }else
+        {
+            spriteRenderer.sortingLayerName = "DecorationBehindPlayer";
         }
     }
 }

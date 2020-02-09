@@ -45,11 +45,20 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Floor
+    uniqueID: 3391197587
+    locked: 0
+  - name: ShadowBehindPlayerAndWall
+    uniqueID: 941909105
+    locked: 0
   - name: Wall
     uniqueID: 3267539553
     locked: 0
-  - name: Decoration
+  - name: DecorationBehindPlayer
     uniqueID: 1640274163
+    locked: 0
+  - name: ShadowBehindPlayer
+    uniqueID: 2683151273
     locked: 0
   - name: WeaponBehindBody
     uniqueID: 3587358709
@@ -60,6 +69,9 @@ TagManager:
   - name: WeaponInFrontOfBody
     uniqueID: 4272950339
     locked: 0
-  - name: Shadow
+  - name: DecorationInFrontPlayer
+    uniqueID: 3307608253
+    locked: 0
+  - name: ShadowInFrontPlayer
     uniqueID: 4236059153
     locked: 0

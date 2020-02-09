@@ -6,8 +6,8 @@ public class SpawnRoom : RoomClass
 {
 
 
-    public new int roomWidth = 40;
-    public new int roomHeight = 25;
+    public new int roomWidth = 25;
+    public new int roomHeight = 15;
 
     public new int finalRoomWidth;
     public new int finalRoomHeight;
@@ -15,31 +15,30 @@ public class SpawnRoom : RoomClass
 
     System.Random prng;
 
-    
-    public SpawnRoom(int seed, Vector2 globalPosition, bool leftOpen, bool rightOpen, bool topOpen, bool botOpen, bool active, GameObject thisRoom) 
-        : base(seed, globalPosition, leftOpen, rightOpen, topOpen, botOpen, active, thisRoom)
+
+    public SpawnRoom(int seed, int roomWidth, int roomHeight, Vector2 globalPosition, bool leftOpen, bool rightOpen, bool topOpen, bool botOpen, bool active)
+        : base(seed, roomWidth, roomHeight, globalPosition, leftOpen, rightOpen, topOpen, botOpen, active)
     {
-       prng = new System.Random(seed);
-       finalRoomWidth = roomWidth + border * 2;
+        prng = new System.Random(seed);
+        finalRoomWidth = roomWidth + border * 2;
         finalRoomHeight = roomHeight + border * 2;
     }
-    
+
     public new RoomClass.RoomSprite[,] GenerateRoomGrid()
     {
         RoomClass.RoomSprite[,] roomGrid = new RoomClass.RoomSprite[finalRoomWidth, finalRoomHeight];
 
         Setup();
 
-        Test();
+        Variation();
 
         leftEntrance(leftOpen);
         rightEntrance(rightOpen);
         topEntrance(topOpen);
         botEntrance(botOpen);
+        MakeColliderBorder();
 
         roomGrid = BasicSpriteAssigner.AssignBasicSprites(roomGrid);
-
-        
 
         void Setup()
         {
@@ -54,8 +53,7 @@ public class SpawnRoom : RoomClass
                 }
             }
         }
-
-        void Test()
+        void Variation()
         {
             int rHBT = finalRoomHeight - border;
             int rWBR = finalRoomWidth - border;
@@ -79,6 +77,27 @@ public class SpawnRoom : RoomClass
                     roomGrid[x, y] = RoomSprite.Border;
                 }
             }
+
+            for (int y = border; y < rHBT; y++)
+            {
+                int dex = prng.Next(4);
+
+                for (int x = rWBR; x > rWBR - dex + 1; x--)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
+            for (int y = border; y < rHBT; y++)
+            {
+                int dex = prng.Next(4);
+
+                for (int x = border; x < border + dex + 1; x++)
+                {
+                    roomGrid[x, y] = RoomSprite.Border;
+                }
+            }
+
         }
 
         void leftEntrance(bool t)
@@ -87,7 +106,7 @@ public class SpawnRoom : RoomClass
             int entranceHighestY = finalRoomHeight / 2 + 1;
             if (t)
             {
-                for (int x = 0; x < border; x++)
+                for (int x = 0; x < finalRoomWidth / 2; x++)
                 {
                     for (int y = entranceLowestY; y < entranceHighestY; y++)
                     {
@@ -108,7 +127,7 @@ public class SpawnRoom : RoomClass
             int entranceHighestY = finalRoomHeight / 2 + 1;
             if (t)
             {
-                for (int x = roomWidth + border - 1; x < finalRoomWidth; x++)
+                for (int x = finalRoomWidth / 2; x < finalRoomWidth; x++)
                 {
                     for (int y = entranceLowestY; y < entranceHighestY; y++)
                     {
@@ -121,8 +140,6 @@ public class SpawnRoom : RoomClass
 
         }
 
-
-
         void topEntrance(bool t)
         {
             int entranceLowestX = finalRoomWidth / 2 - 1;
@@ -131,7 +148,7 @@ public class SpawnRoom : RoomClass
             {
                 for (int x = entranceLowestX; x < entranceHighestX; x++)
                 {
-                    for (int y = roomHeight; y < finalRoomHeight; y++)
+                    for (int y = finalRoomHeight / 2; y < finalRoomHeight; y++)
                     {
                         roomGrid[x, y] = RoomClass.RoomSprite.Floor;
                     }
@@ -142,7 +159,6 @@ public class SpawnRoom : RoomClass
 
         }
 
-
         void botEntrance(bool t)
         {
             int entranceLowestX = finalRoomWidth / 2 - 1;
@@ -151,21 +167,32 @@ public class SpawnRoom : RoomClass
             {
                 for (int x = entranceLowestX; x < entranceHighestX; x++)
                 {
-                    for (int y = 0; y < border; y++)
+                    for (int y = 0; y < finalRoomHeight / 2; y++)
                     {
                         roomGrid[x, y] = RoomClass.RoomSprite.Floor;
                     }
-                    
+
                 }
 
                 enterPointBot = new Vector2(finalRoomWidth / 2, border - 1);
             }
 
         }
+
+        void MakeColliderBorder()
+        {
+            for (int x = 0; x < finalRoomWidth - 1; x++) roomGrid[x, finalRoomHeight - 1] = RoomClass.RoomSprite.BorderWall;
+            for (int x = 0; x < finalRoomWidth - 1; x++) roomGrid[x, 0] = RoomClass.RoomSprite.BorderWall;
+            for (int y = 0; y < finalRoomHeight - 1; y++) roomGrid[finalRoomWidth - 1, y] = RoomClass.RoomSprite.BorderWall;
+            for (int y = 0; y < finalRoomHeight - 1; y++) roomGrid[0, y] = RoomClass.RoomSprite.BorderWall;
+        }
+
         this.roomGrid = roomGrid;
 
         return roomGrid;
     }
+
+
 
     public new bool BorderCheck(int x, int y) //returns True if the given position is within the border
     {

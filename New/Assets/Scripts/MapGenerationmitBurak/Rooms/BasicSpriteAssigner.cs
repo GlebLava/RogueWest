@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BasicSpriteAssigner 
+public static class BasicSpriteAssigner
 {
 
     enum Directions { left, right, up, down }
@@ -47,15 +47,15 @@ public static class BasicSpriteAssigner
                     if (WallCheck(x, y))
                     {
 
-                        if (grid[x - 1, y] == RoomClass.RoomSprite.Floor && grid[x, y + 1] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerCheck(x, y - 1) && EmptyandWallandCornerCheck(x + 1, y))
+                        if (FloorCheck(x - 1, y) && FloorCheck(x, y + 1)  && BorderandWallandCornerCheck(x, y - 1) && BorderandWallandCornerCheck(x + 1, y))
                             grid[x, y] = RoomClass.RoomSprite.CornerTopLeft;
 
-                        if (grid[x, y + 1] == RoomClass.RoomSprite.Floor && grid[x + 1, y] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerCheck(x, y - 1) && EmptyandWallandCornerCheck(x - 1, y))
+                        if (FloorCheck(x, y + 1) && FloorCheck(x + 1, y) && BorderandWallandCornerCheck(x, y - 1) && BorderandWallandCornerCheck(x - 1, y))
                             grid[x, y] = RoomClass.RoomSprite.CornerTopRight;
 
-                        if (grid[x - 1, y] == RoomClass.RoomSprite.Floor && grid[x, y - 1] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerCheck(x, y + 1) && EmptyandWallandCornerCheck(x + 1, y))
+                        if (FloorCheck(x - 1, y) && FloorCheck(x, y - 1) && BorderandWallandCornerCheck(x, y + 1) && BorderandWallandCornerCheck(x + 1, y))
                             grid[x, y] = RoomClass.RoomSprite.CornerBotLeft;
-                        if (grid[x + 1, y] == RoomClass.RoomSprite.Floor && grid[x, y - 1] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerCheck(x, y + 1) && EmptyandWallandCornerCheck(x - 1, y))
+                        if (FloorCheck(x + 1, y) && FloorCheck(x, y - 1) && BorderandWallandCornerCheck(x, y + 1) && BorderandWallandCornerCheck(x - 1, y))
                             grid[x, y] = RoomClass.RoomSprite.CornerBotRight;
 
                     }
@@ -76,10 +76,10 @@ public static class BasicSpriteAssigner
                     if (WallCheck(x, y) || CornerCheck(x, y))
                     {
 
-                        if (grid[x - 1, y] == RoomClass.RoomSprite.Floor && grid[x + 1, y] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerandTwoCheck(x, y - 1) && EmptyandWallandCornerandTwoCheck(x, y + 1))
+                        if (FloorCheck(x - 1, y)  && FloorCheck(x + 1, y)  && BorderandWallandCornerandTwoCheck(x, y - 1) && BorderandWallandCornerandTwoCheck(x, y + 1))
                             grid[x, y] = RoomClass.RoomSprite.twoLeftRight;
 
-                        if (grid[x, y + 1] == RoomClass.RoomSprite.Floor && grid[x, y + -1] == RoomClass.RoomSprite.Floor && EmptyandWallandCornerandTwoCheck(x + 1, y) && EmptyandWallandCornerandTwoCheck(x - 1, y))
+                        if (FloorCheck(x, y + 1)&& FloorCheck(x, y + -1) && BorderandWallandCornerandTwoCheck(x + 1, y) && BorderandWallandCornerandTwoCheck(x - 1, y))
                             grid[x, y] = RoomClass.RoomSprite.twoTopBot;
 
                     }
@@ -125,7 +125,7 @@ public static class BasicSpriteAssigner
                     if (CornerCheck(x, y) || WallCheck(x, y))
                     {
 
-                        if (grid[x - 1, y] == RoomClass.RoomSprite.Floor && grid[x + 1, y] == RoomClass.RoomSprite.Floor && grid[x, y + 1] == RoomClass.RoomSprite.Floor && grid[x, y - 1] == RoomClass.RoomSprite.Floor)
+                        if (FloorCheck(x - 1, y) && FloorCheck(x + 1, y) && FloorCheck(x, y + 1) && FloorCheck(x, y - 1) )
                             grid[x, y] = RoomClass.RoomSprite.Pillar;
 
                     }
@@ -140,7 +140,12 @@ public static class BasicSpriteAssigner
         //all the Checks start
         //
         //
-        bool EmptyCheck(int posX, int posY)
+        bool FloorCheck(int posX, int posY)
+        {
+            return (grid[posX, posY] == RoomClass.RoomSprite.Floor || grid[posX, posY] == RoomClass.RoomSprite.Floor2);
+        }
+
+        bool BorderCheck(int posX, int posY)
         {
             if (grid[posX, posY] == RoomClass.RoomSprite.Border) return true;
             else return false;
@@ -180,22 +185,22 @@ public static class BasicSpriteAssigner
         //
         //
 
-        bool EmptyandWallandCornerCheck(int posX, int posY)
+        bool BorderandWallandCornerCheck(int posX, int posY)
         {
-            if (EmptyCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY))
+            if (BorderCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY))
                 return true;
             else return false;
         }
-        bool EmptyandWallandCornerandTwoCheck(int posX, int posY)
+        bool BorderandWallandCornerandTwoCheck(int posX, int posY)
         {
-            if (EmptyCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY) || TwoWallCheck(posX, posY))
+            if (BorderCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY) || TwoWallCheck(posX, posY))
                 return true;
             else return false;
         }
 
         bool WallandCornerandTwoandThreeCheck(int posX, int posY)
         {
-            if (EmptyCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY) || TwoWallCheck(posX, posY) || ThreeWallCheck(posX, posY))
+            if (BorderCheck(posX, posY) || WallCheck(posX, posY) || CornerCheck(posX, posY) || TwoWallCheck(posX, posY) || ThreeWallCheck(posX, posY))
                 return true;
             else return false;
         }
@@ -209,35 +214,34 @@ public static class BasicSpriteAssigner
             switch (dir)
             {
                 case Directions.down:
-                    if (WallandCornerandTwoandThreeCheck(posX, posY + 1) && grid[posX, posY - 1] == RoomClass.RoomSprite.Floor && grid[posX + 1, posY] == RoomClass.RoomSprite.Floor
-                        && grid[posX - 1, posY] == RoomClass.RoomSprite.Floor)
+                    if (WallandCornerandTwoandThreeCheck(posX, posY + 1) && FloorCheck(posX, posY - 1) && FloorCheck(posX + 1, posY)
+                        && FloorCheck(posX - 1, posY))
                         return true;
                     break;
                 case Directions.up:
-                    if (WallandCornerandTwoandThreeCheck(posX, posY - 1) && grid[posX, posY + 1] == RoomClass.RoomSprite.Floor && grid[posX + 1, posY] == RoomClass.RoomSprite.Floor
-                        && grid[posX - 1, posY] == RoomClass.RoomSprite.Floor)
+                    if (WallandCornerandTwoandThreeCheck(posX, posY - 1) && FloorCheck(posX, posY + 1) && FloorCheck(posX + 1, posY)
+                        && FloorCheck(posX - 1, posY))
                         return true;
                     break;
                 case Directions.left:
-                    if (WallandCornerandTwoandThreeCheck(posX + 1, posY) && grid[posX, posY - 1] == RoomClass.RoomSprite.Floor && grid[posX - 1, posY] == RoomClass.RoomSprite.Floor
-                        && grid[posX, posY + 1] == RoomClass.RoomSprite.Floor)
+                    if (WallandCornerandTwoandThreeCheck(posX + 1, posY) && FloorCheck(posX, posY - 1) && FloorCheck(posX - 1, posY)
+                        && FloorCheck(posX, posY + 1))
                         return true;
                     break;
                 case Directions.right:
-                    if (WallandCornerandTwoandThreeCheck(posX - 1, posY) && grid[posX, posY - 1] == RoomClass.RoomSprite.Floor && grid[posX, posY + 1] == RoomClass.RoomSprite.Floor
-                        && grid[posX + 1, posY] == RoomClass.RoomSprite.Floor)
+                    if (WallandCornerandTwoandThreeCheck(posX - 1, posY) && FloorCheck(posX, posY - 1) && FloorCheck(posX, posY + 1)
+                        && FloorCheck(posX + 1, posY))
                         return true;
                     break;
                 default:
                     return false;
+
+
             }
 
             return false;
-
-
+            
         }
-
-
         return grid;
     }
 }
