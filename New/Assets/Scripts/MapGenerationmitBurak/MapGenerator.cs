@@ -9,16 +9,15 @@ public class MapGenerator : MonoBehaviour
 
     public int seed;
 
-    private GameObject player;
-
-    private RoomClass[,] roomGrid;
+   
 
     public TileSetHolder[] tileSetHolders;
+    public RoomDecorator roomDecorator;
 
+    
+    private GameObject player;
+    private RoomClass[,] roomGrid;
     private new Camera camera;
-
-    public GameObject cactus;
-
     System.Random prng;
 
     private void Awake()
@@ -30,11 +29,11 @@ public class MapGenerator : MonoBehaviour
 
     private void Start()
     {
-        int roomWidhtsMin = 20;
-        int roomWidhtsMax = 40;
+        int roomWidhtsMin = 40;
+        int roomWidhtsMax = 60;
 
-        int roomHeightsMin = 15;
-        int roomHeightsMax = 30;
+        int roomHeightsMin = 30;
+        int roomHeightsMax = 50;
 
         prng = new System.Random(seed);
 
@@ -43,7 +42,7 @@ public class MapGenerator : MonoBehaviour
         roomGrid = new RoomClass[mapWidth, mapHeight];
 
         //Initialise RoomGrid with an empty (default) Room
-        RoomClass room = new RoomClass(prng.Next(-100000, 100000),0,0, Vector2.zero, false, false, false, false, false);
+        RoomClass room = new RoomClass(prng.Next(-100000, 100000), 0, 0, Vector2.zero, false, false, false, false, false);
         for (int x = 0; x < roomGrid.GetLength(0); x++)
         {
             for (int y = 0; y < roomGrid.GetLength(1); y++)
@@ -60,13 +59,15 @@ public class MapGenerator : MonoBehaviour
                 {
                     GameObject Room = new GameObject("DefaultRoom");
 
-                    RoomClass thisRoom = new RoomClass(prng.Next(-100000,100000), prng.Next(roomWidhtsMin, roomWidhtsMax), prng.Next(roomHeightsMin, roomHeightsMax), Vector2.zero, CheckDirectionLeft(map, x, y), CheckDirectionRight(map, x, y),
+                    RoomClass thisRoom = new RoomClass(prng.Next(-100000, 100000), prng.Next(roomWidhtsMin, roomWidhtsMax), prng.Next(roomHeightsMin, roomHeightsMax), Vector2.zero, CheckDirectionLeft(map, x, y), CheckDirectionRight(map, x, y),
                         CheckDirectionUp(map, x, y), CheckDirectionDown(map, x, y), true);
 
                     thisRoom.thisRoom = Room;
 
                     thisRoom.GenerateRoomGrid();
                     thisRoom.roomType = RoomClass.RoomType.Default;
+
+
 
                     //add Room to RoomGrid
                     roomGrid[x, y] = thisRoom;
@@ -77,7 +78,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     GameObject Room = new GameObject("SpawnRoom");
 
-                    SpawnRoom thisRoom = new SpawnRoom(prng.Next(-100000, 100000), prng.Next(roomWidhtsMin, roomWidhtsMax), prng.Next(roomHeightsMin, roomHeightsMax), Vector2.zero, CheckDirectionLeft(map, x, y), CheckDirectionRight(map, x, y),
+                    SpawnRoom thisRoom = new SpawnRoom(prng.Next(-100000, 100000), 20, 15, Vector2.zero, CheckDirectionLeft(map, x, y), CheckDirectionRight(map, x, y),
                         CheckDirectionUp(map, x, y), CheckDirectionDown(map, x, y), true);
                     thisRoom.thisRoom = Room;
 
@@ -100,7 +101,7 @@ public class MapGenerator : MonoBehaviour
                     roomGrid[x, y].globalPosition = new Vector2(x * getBiggestRoomWidth(roomGrid), y * getBiggestRoomHeight(roomGrid));
                     VisualizeRoom(roomGrid[x, y], tileSetHolders[0]);
 
-                    SpawnRoomDecoration(roomGrid[x, y], cactus);
+                    roomDecorator.SpawnRoomDecoration(roomGrid[x, y]);
 
                     SetEnterPoints(roomGrid[x, y]);
                 }
@@ -136,7 +137,7 @@ public class MapGenerator : MonoBehaviour
     {
         GameObject tileHolder = new GameObject("TileHolder");
         tileHolder.transform.SetParent(room.thisRoom.transform);
-        RoomClass.RoomSprite[,] roomGrid = room.roomGrid;
+        RoomClass.RoomTile[,] roomGrid = room.roomGrid;
 
 
         room.thisRoom.transform.position = room.globalPosition;
@@ -145,10 +146,8 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 0; y < roomGrid.GetLength(1); y++)
             {
-                bool trig;
-                trig = (prng.Next(11) < 9);
 
-                switch (roomGrid[x, y])
+                switch (roomGrid[x, y].roomSpriteAbove)
                 {
                     case RoomClass.RoomSprite.Empty:
                         Spawn(x, y, defaultRoomTileset.empty, tileHolder);
@@ -166,95 +165,62 @@ public class MapGenerator : MonoBehaviour
 
                     case RoomClass.RoomSprite.WallBot:
                         Spawn(x, y, defaultRoomTileset.botWall, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.WallTop:
                         Spawn(x, y, defaultRoomTileset.topWall, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.WallRight:
                         Spawn(x, y, defaultRoomTileset.rightWall, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.WallLeft:
                         Spawn(x, y, defaultRoomTileset.leftWall, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.CornerTopLeft:
                         Spawn(x, y, defaultRoomTileset.cornerTopLeft, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.CornerTopRight:
                         Spawn(x, y, defaultRoomTileset.cornerTopRight, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.CornerBotLeft:
                         Spawn(x, y, defaultRoomTileset.cornerBotLeft, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.CornerBotRight:
                         Spawn(x, y, defaultRoomTileset.cornerBotRight, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.twoTopBot:
                         Spawn(x, y, defaultRoomTileset.twoTopBot, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.twoLeftRight:
                         Spawn(x, y, defaultRoomTileset.twoLeftRight, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.threeBot:
                         Spawn(x, y, defaultRoomTileset.threeBot, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
+
                     case RoomClass.RoomSprite.threeTop:
                         Spawn(x, y, defaultRoomTileset.threeTop, tileHolder);
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.threeLeft:
                         Spawn(x, y, defaultRoomTileset.threeLeft, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.threeRight:
                         Spawn(x, y, defaultRoomTileset.threeRight, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.Pillar:
                         Spawn(x, y, defaultRoomTileset.pillar, tileHolder);
-
-                        if (trig) Spawn(x, y, defaultRoomTileset.floor, tileHolder); //Fill the Tile underneath
-                        else Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                     case RoomClass.RoomSprite.BorderWall:
                         Spawn(x, y, defaultRoomTileset.borderWall, tileHolder);
+                        break;
+                }
+                
+                switch (roomGrid[x, y].roomSpriteUnderneath)
+                {
+                    case RoomClass.RoomSpriteBelow.Floor:
+                        Spawn(x, y, defaultRoomTileset.floor, tileHolder);
+                        break;
+                    case RoomClass.RoomSpriteBelow.Floor2:
+                        Spawn(x, y, defaultRoomTileset.floor2, tileHolder);
                         break;
                 }
             }
@@ -268,7 +234,7 @@ public class MapGenerator : MonoBehaviour
         {
             for (int y = 1; y < grid.GetLength(1); y++)
             {
-                if (grid[x,y].finalRoomWidth > max)
+                if (grid[x, y].finalRoomWidth > max)
                 {
                     max = grid[x, y].finalRoomWidth;
                 }
@@ -280,7 +246,7 @@ public class MapGenerator : MonoBehaviour
     int getBiggestRoomHeight(RoomClass[,] grid)
     {
         int max = grid[0, 0].finalRoomHeight;
-       
+
         for (int x = 1; x < grid.GetLength(0); x++)
         {
             for (int y = 1; y < grid.GetLength(1); y++)
@@ -316,7 +282,7 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    void SetupTriggers(RoomClass room,  int PositionInRoomGridX, int PositionInRoomGridY)
+    void SetupTriggers(RoomClass room, int PositionInRoomGridX, int PositionInRoomGridY)
     {
         BoxCollider2D roomColl = room.thisRoom.AddComponent<BoxCollider2D>();
         roomColl.size = new Vector2(room.finalRoomWidth - 1, room.finalRoomHeight - 1);
@@ -328,7 +294,7 @@ public class MapGenerator : MonoBehaviour
         {
             GameObject leftTriggerHolder = new GameObject("Left Trigger");
             leftTriggerHolder.transform.SetParent(room.thisRoom.transform);
-            leftTriggerHolder.transform.localPosition = room.enterPointLeft - room.globalPosition  + Vector2.left;
+            leftTriggerHolder.transform.localPosition = room.enterPointLeft - room.globalPosition + Vector2.left;
 
             BoxCollider2D boxColl = leftTriggerHolder.AddComponent<BoxCollider2D>();
             CollisionDetector collDet = leftTriggerHolder.AddComponent<CollisionDetector>();
@@ -342,7 +308,7 @@ public class MapGenerator : MonoBehaviour
         {
             GameObject rightTriggerHolder = new GameObject("Right Trigger");
             rightTriggerHolder.transform.SetParent(room.thisRoom.transform);
-            rightTriggerHolder.transform.localPosition =  room.enterPointRight - room.globalPosition   + Vector2.right;
+            rightTriggerHolder.transform.localPosition = room.enterPointRight - room.globalPosition + Vector2.right;
 
             CollisionDetector collDet = rightTriggerHolder.AddComponent<CollisionDetector>();
             collDet.entrance = roomGrid[PositionInRoomGridX + 1, PositionInRoomGridY].enterPointLeft;
@@ -355,7 +321,7 @@ public class MapGenerator : MonoBehaviour
         {
             GameObject botTriggerHolder = new GameObject("Bot Trigger");
             botTriggerHolder.transform.SetParent(room.thisRoom.transform);
-            botTriggerHolder.transform.localPosition =   room.enterPointBot - room.globalPosition +  Vector2.down;
+            botTriggerHolder.transform.localPosition = room.enterPointBot - room.globalPosition + Vector2.down;
 
 
             BoxCollider2D boxColl = botTriggerHolder.AddComponent<BoxCollider2D>();
@@ -369,7 +335,7 @@ public class MapGenerator : MonoBehaviour
         {
             GameObject topTriggerHolder = new GameObject("Top Trigger");
             topTriggerHolder.transform.SetParent(room.thisRoom.transform);
-            topTriggerHolder.transform.localPosition =  room.enterPointTop - room.globalPosition +  Vector2.up;
+            topTriggerHolder.transform.localPosition = room.enterPointTop - room.globalPosition + Vector2.up;
 
             BoxCollider2D boxColl = topTriggerHolder.AddComponent<BoxCollider2D>();
             CollisionDetector collDet = topTriggerHolder.AddComponent<CollisionDetector>();
@@ -407,36 +373,7 @@ public class MapGenerator : MonoBehaviour
         return (map[x, y] == MapGeneratorClass.RoomType.DefaultRoom || map[x, y] == MapGeneratorClass.RoomType.SpawnRoom);
     }
 
-
-    void SpawnRoomDecoration(RoomClass room, GameObject decoration)
-    {
-        RoomClass.RoomSprite[,] grid = room.roomGrid;
-        int distanceX = 0;
-        int distanceY = 0;
-        for (int x = 0; x < grid.GetLength(0); x++)
-        {
-            distanceX++;
-            for (int y = 0; y < grid.GetLength(1); y++)
-            {
-                distanceY++;
-
-                if (!room.BorderCheck(x, y))
-                {
-                    if (prng.Next(0, 10) < 2 && distanceX > 1 && distanceY > 3 && (grid[x, y] == RoomClass.RoomSprite.Floor || grid[x, y] == RoomClass.RoomSprite.Floor2))
-                    {
-                        Spawn(x, y, decoration, room.thisRoom);
-                        distanceX = 0;
-                        distanceY = 0;
-                    }
-
-
-                }
-            }
-
-        }
-    }
-
-    public void Spawn(float x, float y, GameObject toSpawn, GameObject parent)
+    void Spawn(float x, float y, GameObject toSpawn, GameObject parent)
     {
         Vector2 spawnPos = new Vector2(x, y);
         GameObject thing = Instantiate(toSpawn, spawnPos, Quaternion.identity) as GameObject;

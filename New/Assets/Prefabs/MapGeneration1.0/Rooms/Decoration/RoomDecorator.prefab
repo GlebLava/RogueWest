@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4825360131923051784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 421603830881766193}
+  - component: {fileID: 3877627228898191772}
+  m_Layer: 0
+  m_Name: RoomDecorator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &421603830881766193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825360131923051784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3877627228898191772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825360131923051784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d2fef5b20931c4384cec632c9ad48b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skull: {fileID: 3740377172320339778, guid: 96c707f55254ab84bb636792575bb9db, type: 3}
+  cacti:
+  - {fileID: 2172412540670276129, guid: d344072d5c97e2d48a8d628eb2e26609, type: 3}
+  - {fileID: 3421714964503258178, guid: f9e8d523753b0bc4986540ff9fcdfefe, type: 3}
+  - {fileID: 635097422327024077, guid: 98dcfe8bc76407244b393665427edbe9, type: 3}
+  - {fileID: 4704715085229622290, guid: 6958eb6518b985d4ebd8a32c91684364, type: 3}
+  inRoomStones:
+  - {fileID: 3133859762641386743, guid: 0272b3092ed669441858cd079cf5fae8, type: 3}
+  - {fileID: 6630348180643020994, guid: 973dec5ddd9723b4983ac8cecd5a4c12, type: 3}
+  - {fileID: 3432840710105819731, guid: ad6346f8c21088f49835e7783e4f1e22, type: 3}
+  outRoomMiddleStones:
+  - {fileID: 3874143898570844562, guid: bbc7c545934c42c43aeecaa3379ce35b, type: 3}
+  - {fileID: 4551536596685713200, guid: e793f40ce3ad3404db6adca463e4c6cf, type: 3}
+  - {fileID: 1804764927863446820, guid: b23858e6871d6cc438eeb02cfb8d1b1a, type: 3}
+  - {fileID: 7851089994101442039, guid: 65af8b6bc33fe624ca41ab3330ed5999, type: 3}
+  - {fileID: 4883376514203803166, guid: 269ab26b079ab3b4f86824308b4d562c, type: 3}

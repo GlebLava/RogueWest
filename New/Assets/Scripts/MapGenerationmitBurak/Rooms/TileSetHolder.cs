@@ -6,7 +6,7 @@ public class TileSetHolder : MonoBehaviour
 {
     
     public GameObject topWall, botWall, leftWall, rightWall;
-    public GameObject floor, floor2, border, empty;
+    public GameObject floor, floor2 , border, empty;
     public GameObject cornerTopLeft, cornerTopRight, cornerBotRight, cornerBotLeft;
     public GameObject twoTopBot, twoLeftRight;
     public GameObject threeBot, threeTop, threeLeft, threeRight;

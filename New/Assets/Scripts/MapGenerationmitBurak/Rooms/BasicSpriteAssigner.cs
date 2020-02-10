@@ -7,7 +7,7 @@ public static class BasicSpriteAssigner
 
     enum Directions { left, right, up, down }
 
-    public static RoomClass.RoomSprite[,] AssignBasicSprites(RoomClass.RoomSprite[,] grid)
+    public static RoomClass.RoomTile[,] AssignBasicSprites(RoomClass.RoomTile[,] grid)
     {
         CreateWallsUDLR();
         CreateCornerWalls();
@@ -23,13 +23,13 @@ public static class BasicSpriteAssigner
                 for (int y = 2; y < grid.GetLength(1) - 1; y++)
 
                 {
-                    if (grid[x, y] == RoomClass.RoomSprite.Floor)
+                    if (grid[x, y].roomSpriteAbove == RoomClass.RoomSprite.Floor)
                     {
 
-                        if (grid[x - 1, y] == RoomClass.RoomSprite.Border) grid[x - 1, y] = RoomClass.RoomSprite.WallRight;
-                        if (grid[x + 1, y] == RoomClass.RoomSprite.Border) grid[x + 1, y] = RoomClass.RoomSprite.WallLeft;
-                        if (grid[x, y - 1] == RoomClass.RoomSprite.Border) grid[x, y - 1] = RoomClass.RoomSprite.WallTop;
-                        if (grid[x, y + 1] == RoomClass.RoomSprite.Border) grid[x, y + 1] = RoomClass.RoomSprite.WallBot;
+                        if (grid[x - 1, y].roomSpriteAbove == RoomClass.RoomSprite.Border) { grid[x - 1, y].roomSpriteAbove = RoomClass.RoomSprite.WallRight; grid[x - 1, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor; }
+                        if (grid[x + 1, y].roomSpriteAbove == RoomClass.RoomSprite.Border) { grid[x + 1, y].roomSpriteAbove = RoomClass.RoomSprite.WallLeft; grid[x + 1, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor; }
+                        if (grid[x, y - 1].roomSpriteAbove == RoomClass.RoomSprite.Border) { grid[x, y - 1].roomSpriteAbove = RoomClass.RoomSprite.WallTop; grid[x, y - 1].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor; }
+                        if (grid[x, y + 1].roomSpriteAbove == RoomClass.RoomSprite.Border) { grid[x, y + 1].roomSpriteAbove = RoomClass.RoomSprite.WallBot; grid[x, y + 1].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor; }
                     }
 
                 }
@@ -47,16 +47,28 @@ public static class BasicSpriteAssigner
                     if (WallCheck(x, y))
                     {
 
-                        if (FloorCheck(x - 1, y) && FloorCheck(x, y + 1)  && BorderandWallandCornerCheck(x, y - 1) && BorderandWallandCornerCheck(x + 1, y))
-                            grid[x, y] = RoomClass.RoomSprite.CornerTopLeft;
+                        if (FloorCheck(x - 1, y) && FloorCheck(x, y + 1) && BorderandWallandCornerCheck(x, y - 1) && BorderandWallandCornerCheck(x + 1, y))
+                        {
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.CornerTopLeft;
+                            grid[x, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor;
+                        }
 
                         if (FloorCheck(x, y + 1) && FloorCheck(x + 1, y) && BorderandWallandCornerCheck(x, y - 1) && BorderandWallandCornerCheck(x - 1, y))
-                            grid[x, y] = RoomClass.RoomSprite.CornerTopRight;
+                        {
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.CornerTopRight;
+                            grid[x, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor;
+                        }
 
                         if (FloorCheck(x - 1, y) && FloorCheck(x, y - 1) && BorderandWallandCornerCheck(x, y + 1) && BorderandWallandCornerCheck(x + 1, y))
-                            grid[x, y] = RoomClass.RoomSprite.CornerBotLeft;
+                        {
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.CornerBotLeft;
+                            grid[x, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor;
+                        }
                         if (FloorCheck(x + 1, y) && FloorCheck(x, y - 1) && BorderandWallandCornerCheck(x, y + 1) && BorderandWallandCornerCheck(x - 1, y))
-                            grid[x, y] = RoomClass.RoomSprite.CornerBotRight;
+                        {
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.CornerBotRight;
+                            grid[x, y].roomSpriteUnderneath = RoomClass.RoomSpriteBelow.Floor;
+                        }
 
                     }
 
@@ -77,10 +89,10 @@ public static class BasicSpriteAssigner
                     {
 
                         if (FloorCheck(x - 1, y)  && FloorCheck(x + 1, y)  && BorderandWallandCornerandTwoCheck(x, y - 1) && BorderandWallandCornerandTwoCheck(x, y + 1))
-                            grid[x, y] = RoomClass.RoomSprite.twoLeftRight;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.twoLeftRight;
 
                         if (FloorCheck(x, y + 1)&& FloorCheck(x, y + -1) && BorderandWallandCornerandTwoCheck(x + 1, y) && BorderandWallandCornerandTwoCheck(x - 1, y))
-                            grid[x, y] = RoomClass.RoomSprite.twoTopBot;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.twoTopBot;
 
                     }
 
@@ -100,13 +112,13 @@ public static class BasicSpriteAssigner
                     {
 
                         if (ThreeEmpty(Directions.down, x, y))
-                            grid[x, y] = RoomClass.RoomSprite.threeBot;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.threeBot;
                         if (ThreeEmpty(Directions.left, x, y))
-                            grid[x, y] = RoomClass.RoomSprite.threeLeft;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.threeLeft;
                         if (ThreeEmpty(Directions.right, x, y))
-                            grid[x, y] = RoomClass.RoomSprite.threeRight;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.threeRight;
                         if (ThreeEmpty(Directions.up, x, y))
-                            grid[x, y] = RoomClass.RoomSprite.threeTop;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.threeTop;
 
                     }
 
@@ -126,7 +138,7 @@ public static class BasicSpriteAssigner
                     {
 
                         if (FloorCheck(x - 1, y) && FloorCheck(x + 1, y) && FloorCheck(x, y + 1) && FloorCheck(x, y - 1) )
-                            grid[x, y] = RoomClass.RoomSprite.Pillar;
+                            grid[x, y].roomSpriteAbove = RoomClass.RoomSprite.Pillar;
 
                     }
 
@@ -142,37 +154,37 @@ public static class BasicSpriteAssigner
         //
         bool FloorCheck(int posX, int posY)
         {
-            return (grid[posX, posY] == RoomClass.RoomSprite.Floor || grid[posX, posY] == RoomClass.RoomSprite.Floor2);
+            return (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.Floor || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.Floor2);
         }
 
         bool BorderCheck(int posX, int posY)
         {
-            if (grid[posX, posY] == RoomClass.RoomSprite.Border) return true;
+            if (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.Border) return true;
             else return false;
         }
         bool WallCheck(int posX, int posY)
         {
-            if (grid[posX, posY] == RoomClass.RoomSprite.WallBot || grid[posX, posY] == RoomClass.RoomSprite.WallLeft || grid[posX, posY] == RoomClass.RoomSprite.WallRight ||
-                grid[posX, posY] == RoomClass.RoomSprite.WallTop) return true;
+            if (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.WallBot || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.WallLeft || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.WallRight ||
+                grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.WallTop) return true;
             else return false;
         }
 
         bool CornerCheck(int posX, int posY)
         {
-            if (grid[posX, posY] == RoomClass.RoomSprite.CornerBotLeft || grid[posX, posY] == RoomClass.RoomSprite.CornerBotRight
-                || grid[posX, posY] == RoomClass.RoomSprite.CornerTopLeft || grid[posX, posY] == RoomClass.RoomSprite.CornerTopRight) return true;
+            if (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.CornerBotLeft || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.CornerBotRight
+                || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.CornerTopLeft || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.CornerTopRight) return true;
             else return false;
         }
 
         bool TwoWallCheck(int posX, int posY)
         {
-            if (grid[posX, posY] == RoomClass.RoomSprite.twoTopBot || grid[posX, posY] == RoomClass.RoomSprite.twoLeftRight) return true;
+            if (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.twoTopBot || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.twoLeftRight) return true;
             else return false;
         }
         bool ThreeWallCheck(int posX, int posY)
         {
-            if (grid[posX, posY] == RoomClass.RoomSprite.threeBot || grid[posX, posY] == RoomClass.RoomSprite.threeTop
-                || grid[posX, posY] == RoomClass.RoomSprite.threeLeft || grid[posX, posY] == RoomClass.RoomSprite.threeRight) return true;
+            if (grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.threeBot || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.threeTop
+                || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.threeLeft || grid[posX, posY].roomSpriteAbove == RoomClass.RoomSprite.threeRight) return true;
             else return false;
 
 

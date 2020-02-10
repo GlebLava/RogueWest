@@ -75,4 +75,4 @@ MonoBehaviour:
   pillar: {fileID: 1652600507776870, guid: c5d555e5047fcd146a6c6b7c6edd8072, type: 3}
   borderWall: {fileID: 3318068907207320635, guid: 618159fdcc0ecb04db01fce7c531202b,
     type: 3}
-  tileSetType: 0
+  tileSetType: 1

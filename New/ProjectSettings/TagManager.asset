@@ -51,14 +51,17 @@ TagManager:
   - name: ShadowBehindPlayerAndWall
     uniqueID: 941909105
     locked: 0
+  - name: DecoBehindPlayerAndWall
+    uniqueID: 655947669
+    locked: 0
   - name: Wall
     uniqueID: 3267539553
     locked: 0
-  - name: DecorationBehindPlayer
-    uniqueID: 1640274163
-    locked: 0
   - name: ShadowBehindPlayer
     uniqueID: 2683151273
+    locked: 0
+  - name: DecorationBehindPlayer
+    uniqueID: 1640274163
     locked: 0
   - name: WeaponBehindBody
     uniqueID: 3587358709
