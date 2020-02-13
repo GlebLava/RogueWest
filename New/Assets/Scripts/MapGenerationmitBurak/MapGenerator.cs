@@ -285,7 +285,9 @@ public class MapGenerator : MonoBehaviour
     void SetupTriggers(RoomClass room, int PositionInRoomGridX, int PositionInRoomGridY)
     {
         BoxCollider2D roomColl = room.thisRoom.AddComponent<BoxCollider2D>();
-        roomColl.size = new Vector2(room.finalRoomWidth - 1, room.finalRoomHeight - 1);
+        RoomChecker thisRoomsChecker = room.thisRoom.AddComponent<RoomChecker>();
+        thisRoomsChecker.ParentRoom = room;
+        roomColl.size = new Vector2(room.finalRoomWidth, room.finalRoomHeight);
         roomColl.offset = new Vector2(room.finalRoomWidth / 2, room.finalRoomHeight / 2);
         roomColl.isTrigger = true;
 

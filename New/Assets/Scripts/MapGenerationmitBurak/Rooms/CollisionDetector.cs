@@ -10,22 +10,21 @@ public class CollisionDetector : MonoBehaviour
 
     private GameObject player;
     private new Camera camera;
+    private GameHandler gameHandler;
     
-    private void Awake()
+    private void Start()
     {
+        gameHandler = GameObject.Find("GameHandler").GetComponent<GameHandler>();
         player = GameObject.Find("Player");
         camera = Camera.main;
     } 
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
         if (other.gameObject.tag == "Player")
         {
+            gameHandler.JumpCameraToPosAndUnfreeze(new Vector3(entrance.x, entrance.y, camera.transform.position.z));
             player.transform.position = entrance;
-      
-            camera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y,  camera.transform.position.z) ;
         }
-            
     }
 }

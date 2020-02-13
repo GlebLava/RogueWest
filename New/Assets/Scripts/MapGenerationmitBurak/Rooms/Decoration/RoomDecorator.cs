@@ -22,7 +22,7 @@ public class RoomDecorator : MonoBehaviour
 
     struct DecoStruct
     {
-        public DecoRation decoType;
+        //public DecoRation decoType;
         public bool inRoomSpawnable; //false by default
         public bool BorderSpawnable;
     }

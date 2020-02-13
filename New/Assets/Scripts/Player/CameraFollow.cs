@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    public bool stopFollow = false;
     private  Func<Vector3> getcameraFollowPositionFunc;
 
     public void SetUp(Func<Vector3> getcameraFollowPositionFunc)
@@ -21,10 +22,28 @@ public class CameraFollow : MonoBehaviour
         this.getcameraFollowPositionFunc = getCameraFollowingPositionFunc;
     }
 
-    // Update is called once per frame
+    public void JumpCameraToAndFreeze(Vector3 jumpToPosition)
+    {
+        transform.position = jumpToPosition;
+        stopFollow = true;
+    }
+
+    public void JumpCameraToAndWait(Vector3 jumpToPosition)
+    {
+        transform.position = jumpToPosition;
+        StartCoroutine(StopFollowing(0.25f));
+    }
+
+    public void JumpCameraToAndUnFreeze(Vector3 jumpToPosition)
+    {
+        transform.position = jumpToPosition;
+        stopFollow = false;
+    }
+
+
     void Update()
     {
-        HandleMovement();
+        if (!stopFollow) HandleMovement();
         
     }
 
@@ -49,6 +68,14 @@ public class CameraFollow : MonoBehaviour
 
             transform.position = newCameraPosition;
         }
+
+    }
+
+    IEnumerator StopFollowing(float seconds)
+    {
+        stopFollow = true;
+        yield return new WaitForSeconds(seconds);
+        stopFollow = false;
 
     }
 

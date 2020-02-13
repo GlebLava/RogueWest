@@ -6,7 +6,8 @@ public class RoomClass
 {
     public enum RoomType { Empty, Default, SpawnRoom, }
 
-    public int border = 15;
+    public const int border = 12;
+
     public enum RoomSprite
     {
         Empty, Border, Floor, Floor2,
@@ -196,7 +197,7 @@ public class RoomClass
                 }
             }
 
-            enterPointLeft = new Vector2(border - 1, entranceMiddl);
+            enterPointLeft = new Vector2(1, entranceMiddl);
 
         }
 
@@ -220,7 +221,7 @@ public class RoomClass
                 }
             }
 
-            enterPointRight = new Vector2(finalRoomWidth - border, entranceMiddl);
+            enterPointRight = new Vector2(finalRoomWidth - 2, entranceMiddl);
         }
 
     }
@@ -243,7 +244,7 @@ public class RoomClass
                 }
             }
 
-            enterPointTop = new Vector2(entranceMiddl, finalRoomHeight - border);
+            enterPointTop = new Vector2(entranceMiddl, finalRoomHeight - 2);
         }
 
     }
@@ -263,7 +264,7 @@ public class RoomClass
 
             }
 
-            enterPointBot = new Vector2(entranceMiddl, border - 1);
+            enterPointBot = new Vector2(entranceMiddl,  2 );
         }
 
     }
