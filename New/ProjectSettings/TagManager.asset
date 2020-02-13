@@ -9,6 +9,7 @@ TagManager:
   - MapGenerator
   - Bullet
   - GameHandler
+  - Test
   layers:
   - Default
   - TransparentFX

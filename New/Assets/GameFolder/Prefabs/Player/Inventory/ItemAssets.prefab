@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &317999314670415496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 317999314670415494}
+  - component: {fileID: 317999314670415497}
+  m_Layer: 0
+  m_Name: ItemAssets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &317999314670415494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317999314670415496}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 97.867096, y: 635.9894, z: 18.375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &317999314670415497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317999314670415496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cb2aabfc78f244388b169e586b26e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemWorld: {fileID: 202125077475718299, guid: 0d7167beebb32624ab104da27258db54,
+    type: 3}
+  swordSprite: {fileID: 21300000, guid: 231413f64eb7b1143822e37fa693f27e, type: 3}
+  healthPotionSprite: {fileID: 21300000, guid: 57476f24a018ca9438b8584dc2a24a91, type: 3}
+  manaPotionSprite: {fileID: 21300000, guid: 8c8d4bbb34c4a0e40813029ebdad75b0, type: 3}
+  medKitSprite: {fileID: 21300000, guid: 54f95a5c9c8e83a498ec1b80e63cc3e7, type: 3}
+  coinSprite: {fileID: 21300000, guid: 28087cd055b007343a2f0f6d2a21cd7e, type: 3}
