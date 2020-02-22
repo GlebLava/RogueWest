@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,13 +9,18 @@ public class DestroyableDecoration : MonoBehaviour
     public GameObject obj2;
     public GameObject obj3;
 
-
+    public DecorationEventHandler myDecoEventHandler;
+  
     int lives = 3;
     GameObject player;
 
     private void Awake()
     {
         player = GameObject.FindWithTag("Player");
+    }
+    private void Start()
+    {
+        InvokeImThere();
     }
     private void FixedUpdate()
     {
@@ -39,6 +45,10 @@ public class DestroyableDecoration : MonoBehaviour
                 LayerHandler(obj3.GetComponent<SpriteRenderer>());
                 break;
             default:
+                InvokeIGotDestroyed();
+
+
+
                 Destroy(gameObject);
                 break;
 
@@ -62,5 +72,14 @@ public class DestroyableDecoration : MonoBehaviour
         {
             spriteRenderer.sortingLayerName = "DecorationBehindPlayer";
         }
+    }
+
+    private void InvokeIGotDestroyed()
+    {
+       myDecoEventHandler.DecorationGotDestroyed(transform.position);
+    }
+    private void InvokeImThere()
+    {
+        myDecoEventHandler.DecorationIsThere(transform.position);
     }
 }

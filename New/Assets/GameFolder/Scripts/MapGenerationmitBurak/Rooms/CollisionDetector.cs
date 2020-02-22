@@ -23,7 +23,7 @@ public class CollisionDetector : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            gameHandler.JumpCameraToPosAndUnfreeze(new Vector3(entrance.x, entrance.y, camera.transform.position.z));
+            gameHandler.JumpCameraToPosAndFreezeFor(new Vector3(entrance.x, entrance.y, camera.transform.position.z), 0.25f);
             player.transform.position = entrance;
         }
     }

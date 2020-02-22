@@ -9,6 +9,7 @@ public class MapGenerator : MonoBehaviour
 
     public int seed;
 
+    public GameObject enemy;
 
 
     public TileSetHolder[] tileSetHolders;
@@ -49,7 +50,12 @@ public class MapGenerator : MonoBehaviour
         LastSetup();
     }
 
-
+    void Test(int x, int y, RoomClass room) //REMOVE AFTER TESTING!!!!!!!!!!!
+    {
+        GameObject thisEnemy = MyUtils.Spawn(x,y, enemy, room.thisRoom);
+        EnemyTest enemyTest = thisEnemy.GetComponent<EnemyTest>();
+        enemyTest.AssignRoom(room);
+    }
 
 
     private MapGeneratorClass.RoomType[,] InitiliazeRoomGrid()
@@ -129,6 +135,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
+
     private void SetupExits()
     {
         for (int x = 0; x < roomGrid.GetLength(0); x++)
@@ -143,7 +150,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-
     
     //for LastSetup()
     private void SpawnPlayerInSpawnRoom(int x, int y)
@@ -151,8 +157,13 @@ public class MapGenerator : MonoBehaviour
 
         if (roomGrid[x, y].roomType == RoomClass.RoomType.SpawnRoom)
         {
-            player.transform.position = new Vector2(roomGrid[x, y].globalPosition.x + roomGrid[x, y].finalRoomWidth / 2, roomGrid[x, y].globalPosition.y + roomGrid[x, y].finalRoomHeight / 2);
+            Vector2 middleOfThisSpawnRoom_local = new Vector2(roomGrid[x, y].finalRoomWidth / 2, roomGrid[x, y].finalRoomHeight / 2);
+            Vector2 middleOfThisSpawnRoom_gloabl = new Vector2( roomGrid[x, y].globalPosition.x+ roomGrid[x, y].finalRoomWidth / 2, roomGrid[x, y].globalPosition.y + roomGrid[x, y].finalRoomHeight / 2);
+
+            player.transform.position = middleOfThisSpawnRoom_gloabl;
             camera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, camera.transform.position.z);
+
+            Test((int)middleOfThisSpawnRoom_local.x,(int)middleOfThisSpawnRoom_local.y, roomGrid[x, y]); // REMOVE AFTER TESTING!!!!!!!!!!!!!!!!!!!
             return;
         }
 
@@ -166,7 +177,6 @@ public class MapGenerator : MonoBehaviour
             chestHolder.SpawnRandomChest( temporaryCast.ChestLocation , roomGrid[x, y].thisRoom );
         }
     }
-
 
     // RoomSetups for every RoomType
     private RoomClass DefaultRoomSetup(MapGeneratorClass.RoomType[,] map, int posX, int posY, int roomWidhtsMin, int roomWidhtsMax, int roomHeightsMin, int roomHeightsMax)
@@ -196,8 +206,7 @@ public class MapGenerator : MonoBehaviour
         };
 
         thisRoom.GenerateRoomGrid();
-
-
+ 
         return thisRoom;
     }
 

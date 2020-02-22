@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skull: {fileID: 3740377172320339778, guid: 96c707f55254ab84bb636792575bb9db, type: 3}
-  cacti:
+  destroyableCacti:
   - {fileID: 2172412540670276129, guid: d344072d5c97e2d48a8d628eb2e26609, type: 3}
+  cacti:
   - {fileID: 3421714964503258178, guid: f9e8d523753b0bc4986540ff9fcdfefe, type: 3}
   - {fileID: 635097422327024077, guid: 98dcfe8bc76407244b393665427edbe9, type: 3}
   - {fileID: 4704715085229622290, guid: 6958eb6518b985d4ebd8a32c91684364, type: 3}

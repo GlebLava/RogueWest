@@ -56,6 +56,7 @@ public class ItemWorld : MonoBehaviour
     {
         return item;
     }
+
     public void DestroySelf()
     {
         Destroy(gameObject);

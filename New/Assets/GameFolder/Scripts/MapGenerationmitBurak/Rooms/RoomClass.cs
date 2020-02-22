@@ -50,12 +50,14 @@ public class RoomClass
     public Vector2 enterPointRight;
     public Vector2 enterPointTop;
     public Vector2 enterPointBot;
-
+    
     public RoomTile[,] roomGrid;
 
     public RoomType roomType;
 
     public GameObject thisRoom;
+
+    public DecorationEventHandler thisRoomsdecorationEventHandler;
 
 
     private int middleWidth;
@@ -264,7 +266,7 @@ public class RoomClass
 
             }
 
-            enterPointBot = new Vector2(entranceMiddl,  2 );
+            enterPointBot = new Vector2(entranceMiddl,  1 );
         }
 
     }
@@ -288,7 +290,6 @@ public class RoomClass
                 }
             }
         }
-
 
         bool OneNeighbour(int posX, int posY)
         {
@@ -366,5 +367,12 @@ public class RoomClass
     {
 
         return (x < border + range || x > finalRoomWidth - border - range - 1 || y < border + range || y > finalRoomHeight - border - range - 1);
+    }
+
+    // static Help Methods
+
+    public static bool FloorSpriteCheck(RoomTile roomTileToCheck) //returns true if the given RoomTile's RoomSpirteAbove is one of the Floors
+    {
+        return (roomTileToCheck.roomSpriteAbove == RoomSprite.Floor || roomTileToCheck.roomSpriteAbove == RoomSprite.Floor2);
     }
 }

@@ -12,10 +12,19 @@ public class MyUtils : MonoBehaviour
         return thing;
     }
 
+    public static GameObject Spawn(float x, float y, GameObject toSpawn)
+    {
+        GameObject thing = Instantiate(toSpawn, new Vector2(x,y), Quaternion.identity);   
+        return thing;
+    }
+
     public static GameObject MakeEmptyGameObject(string name)
     {
         GameObject deleteThis = new GameObject(name);
         Destroy(deleteThis);
         return deleteThis;
     }
+
+   
+
 }

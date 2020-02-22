@@ -5,6 +5,8 @@ using UnityEngine;
 public class RoomDecorator : MonoBehaviour
 {
     public GameObject skull;
+
+    public GameObject[] destroyableCacti;
     public GameObject[] cacti;
     public GameObject[] inRoomStones;
 
@@ -30,6 +32,9 @@ public class RoomDecorator : MonoBehaviour
     public void SpawnRoomDecoration(RoomClass room)
     {
         GameObject decorationHolder = MyUtils.Spawn(0, 0, MyUtils.MakeEmptyGameObject("DecorationHolder"), room.thisRoom);
+        DecorationEventHandler thisDecorationsEventHandler = decorationHolder.AddComponent<DecorationEventHandler>();
+
+        room.thisRoomsdecorationEventHandler = thisDecorationsEventHandler; // Add to Room so Pathfinding can Listen to the Decoartion changing
 
         
         prng = room.Prng;
@@ -67,6 +72,13 @@ public class RoomDecorator : MonoBehaviour
                 {
                     MyUtils.Spawn(x, y, cacti[prng.Next(cacti.Length)], decorationHolder);
                     MakeInRoomUnspawnable(x, y,2);
+                }
+
+                if (decoGrid[x, y].inRoomSpawnable && prng.Next(101) > 85) // Destroyable Spawn
+                {
+                    GameObject thisDestroyable = MyUtils.Spawn(x, y, destroyableCacti[prng.Next(destroyableCacti.Length)], decorationHolder);
+                    thisDestroyable.GetComponent<DestroyableDecoration>().myDecoEventHandler = thisDecorationsEventHandler;
+                    MakeInRoomUnspawnable(x, y, 2);
                 }
 
                 if (decoGrid[x, y].inRoomSpawnable && prng.Next(101) > 99)

@@ -40,6 +40,12 @@ public class CameraFollow : MonoBehaviour
         stopFollow = false;
     }
 
+    public void JumpCameraToAndFreezeFor(Vector3 jumpToPosition, float seconds)
+    {
+        transform.position = jumpToPosition;
+        StartCoroutine(StopFollowing(seconds));
+    }
+
 
     void Update()
     {

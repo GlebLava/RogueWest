@@ -27,6 +27,7 @@ public class RoomChecker : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
+
             playerIsInRoom = true;
         }
     }

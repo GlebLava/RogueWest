@@ -25,6 +25,11 @@ public class GameHandler : MonoBehaviour
         cameraFollow.JumpCameraToAndUnFreeze(newPosition);
     }
 
+    public void JumpCameraToPosAndFreezeFor(Vector3 newPosition, float seconds)
+    {
+        cameraFollow.JumpCameraToAndFreezeFor(newPosition, seconds);
+    }
+
     public void FreezeCamera()
     {
         cameraFollow.stopFollow = true;
@@ -37,7 +42,9 @@ public class GameHandler : MonoBehaviour
 
     public void ClampCamera(float clampWidthMin, float clampWidthMax,float clampHeightMin, float clampHeightMax)
     {
-        Vector3 cameraClampPosition = new Vector3(Mathf.Clamp( cameraFollow.transform.position.x, clampWidthMin, clampWidthMax), Mathf.Clamp(cameraFollow.transform.position.y, clampHeightMin, clampHeightMax), cameraFollow.transform.position.z );
-        cameraFollow.transform.position = cameraClampPosition;
+       
+            Vector3 cameraClampPosition = new Vector3(Mathf.Clamp(cameraFollow.transform.position.x, clampWidthMin, clampWidthMax), Mathf.Clamp(cameraFollow.transform.position.y, clampHeightMin, clampHeightMax), cameraFollow.transform.position.z);
+            cameraFollow.transform.position = cameraClampPosition;
+       
     }
 }
